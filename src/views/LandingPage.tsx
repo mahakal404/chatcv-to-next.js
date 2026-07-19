@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'motion/react';
 import { FileText, Sparkles, Layout, Download, Zap, Wand2, ChevronDown, CheckCircle2, ArrowRight, ShieldCheck, Globe, HelpCircle, User } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import RNEXTSignature from '@/components/branding/RNEXTSignature';
 
@@ -13,7 +13,24 @@ const desktopLogo = '/chatcv_desk.webp';
 export default function LandingPage() {
   const { user } = useAuth();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const router = useRouter();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setIsVisible(false); // Scroll Down
+      } else {
+        setIsVisible(true);  // Scroll Up
+      }
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
 
   const faqs = [
     {
@@ -37,7 +54,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-magic-gradient font-sans">
       {/* Navbar */}
-      <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-100 transition-all duration-300">
+      <header className={`fixed top-0 left-0 w-full z-50 transition-transform duration-300 bg-white/80 backdrop-blur-md border-b border-gray-100 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
         <div className="container mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-0">
           <Link href="/" className="flex items-center flex-shrink-0">
             <img src={desktopLogo} alt="ChatCV Logo" className="h-16 w-auto object-contain" />
@@ -59,12 +76,14 @@ export default function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="px-8 py-20 lg:py-32 flex flex-col items-center text-center max-w-5xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
+      <motion.section 
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="px-8 py-20 lg:py-32 flex flex-col items-center text-center max-w-5xl mx-auto pt-32 lg:pt-40"
+      >
+        <div>
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-purple/10 text-brand-purple text-xs font-bold uppercase tracking-widest mb-8 border border-brand-purple/20">
             <Sparkles className="w-3 h-3" />
             AI-Powered CV Maker & Resume Builder
@@ -171,15 +190,21 @@ export default function LandingPage() {
             <div className="absolute -top-6 -right-6 w-24 h-24 bg-brand-pink/10 rounded-full blur-2xl" />
             <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-brand-indigo/10 rounded-full blur-2xl" />
           </motion.div>
-        </motion.div>
-      </section>
+        </div>
+      </motion.section>
 
       {/* Features Section */}
       <section className="px-8 py-20">
-        <div className="text-center mb-16">
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="text-center mb-16"
+        >
           <h2 className="text-4xl font-black text-slate-900 mb-4 tracking-tight">Powerful Features for Your Career</h2>
           <p className="text-slate-500 font-medium">Everything you need in a professional CV Maker</p>
-        </div>
+        </motion.div>
         <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-8">
           {[
             { 
@@ -203,10 +228,10 @@ export default function LandingPage() {
           ].map((feature, idx) => (
             <motion.div
               key={idx}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.1 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ delay: idx * 0.15, duration: 0.5, ease: "easeOut" }}
               className="p-10 rounded-[32px] bg-white shadow-2xl shadow-slate-200/50 flex flex-col items-center text-center group hover:scale-[1.02] transition-all"
             >
               <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-8 ${feature.color} group-hover:scale-110 transition-all`}>
@@ -222,10 +247,16 @@ export default function LandingPage() {
       {/* How It Works Section */}
       <section className="px-8 py-24 bg-slate-50/50">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
+          <motion.div 
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="text-center mb-16"
+          >
             <h2 className="text-4xl font-black text-slate-900 mb-4 tracking-tight">How It Works</h2>
             <p className="text-slate-500 font-medium">Create your professional CV in three simple steps</p>
-          </div>
+          </motion.div>
           <div className="grid md:grid-cols-3 gap-12 relative">
             <div className="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-slate-200 -translate-y-1/2 z-0" />
             {[
@@ -233,13 +264,20 @@ export default function LandingPage() {
               { step: "02", title: "Chat or Fill Details", desc: "Use our AI to generate impactful content or manually enter your professional history into our templates." },
               { step: "03", title: "Export to PDF", desc: "Download your ATS-optimized, high-quality PDF resume instantly and start applying to your dream jobs." }
             ].map((item, idx) => (
-              <div key={idx} className="relative z-10 flex flex-col items-center text-center bg-white p-8 rounded-[32px] shadow-xl shadow-slate-200/30 border border-slate-100">
+              <motion.div 
+                key={idx} 
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ delay: idx * 0.15, duration: 0.5, ease: "easeOut" }}
+                className="relative z-10 flex flex-col items-center text-center bg-white p-8 rounded-[32px] shadow-xl shadow-slate-200/30 border border-slate-100"
+              >
                 <div className="w-12 h-12 rounded-full bg-brand-purple text-white flex items-center justify-center font-black text-lg mb-6 shadow-lg shadow-brand-purple/20">
                   {item.step}
                 </div>
                 <h3 className="text-xl font-black text-slate-900 mb-3">{item.title}</h3>
                 <p className="text-slate-500 text-sm leading-relaxed font-medium">{item.desc}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -247,13 +285,26 @@ export default function LandingPage() {
 
       {/* FAQ Section */}
       <section className="px-8 py-24 max-w-4xl mx-auto">
-        <div className="text-center mb-16">
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="text-center mb-16"
+        >
           <h2 className="text-4xl font-black text-slate-900 mb-4 tracking-tight">Frequently Asked Questions</h2>
           <p className="text-slate-500 font-medium">Everything you need to know about our Free AI Resume Builder</p>
-        </div>
+        </motion.div>
         <div className="space-y-4">
           {faqs.map((faq, idx) => (
-            <div key={idx} className="border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm transition-all hover:border-brand-purple/30">
+            <motion.div 
+              key={idx} 
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ delay: idx * 0.15, duration: 0.5, ease: "easeOut" }}
+              className="border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm transition-all hover:border-brand-purple/30"
+            >
               <button
                 onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
                 className="w-full px-6 py-5 flex items-center justify-between text-left transition-colors"
@@ -275,13 +326,19 @@ export default function LandingPage() {
                   </motion.div>
                 )}
               </AnimatePresence>
-            </div>
+            </motion.div>
           ))}
         </div>
       </section>
 
       {/* Bottom CTA Section */}
-      <section className="w-full py-20 px-4 mt-12 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-3xl shadow-2xl relative overflow-hidden mb-12 max-w-6xl mx-auto">
+      <motion.section 
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="w-full py-20 px-4 mt-12 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-3xl shadow-2xl relative overflow-hidden mb-12 max-w-6xl mx-auto"
+      >
         {/* Abstract Background Elements */}
         <div className="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-white opacity-10 rounded-full blur-2xl"></div>
         <div className="absolute bottom-0 left-0 -mb-10 -ml-10 w-40 h-40 bg-white opacity-10 rounded-full blur-2xl"></div>
@@ -301,7 +358,7 @@ export default function LandingPage() {
             <span>🚀</span>
           </button>
         </div>
-      </section>
+      </motion.section>
 
       {/* Footer */}
       <footer className="bg-white border-t border-slate-100 pt-20 pb-12 px-8">
