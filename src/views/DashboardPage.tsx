@@ -7,7 +7,7 @@ import { collection, query, where, onSnapshot, deleteDoc, doc, addDoc, serverTim
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'motion/react';
-import { Plus, FileText, Trash2, LogOut, Clock, ChevronRight, Sparkles, Wand2, AlertCircle, Pencil, X, Check } from 'lucide-react';
+import { Plus, FileText, Trash2, LogOut, Clock, ChevronRight, Sparkles, Wand2, AlertCircle, Pencil, X, Check, Crown } from 'lucide-react';
 import { Resume } from '../types';
 import { AnimatePresence } from 'motion/react';
 import { toast } from 'sonner';
@@ -259,13 +259,14 @@ export default function DashboardPage() {
         )}
       </AnimatePresence>
       {/* Header */}
-      <header className="bg-white border-b border-slate-200 px-8 py-4 flex items-center justify-between sticky top-0 z-50">
+      <header className="flex justify-between items-center w-full px-4 py-3 bg-white border-b border-gray-100 sticky top-0 z-50">
         <Link href="/" className="flex items-center flex-shrink-0 hover:opacity-90 transition-opacity">
           <img src={desktopLogo} alt="ChatCV Logo" className="h-10 w-auto object-contain" />
         </Link>
-        <div className="flex items-center gap-6">
-          <div className="flex items-center gap-3">
-            <div className="text-right hidden sm:block">
+        
+        <div className="flex items-center gap-2 sm:gap-4">
+          <div className="hidden sm:flex items-center gap-3 mr-2">
+            <div className="text-right">
               <p className="text-sm font-bold text-slate-900">{user?.displayName || 'User'}</p>
               <p className="text-xs text-slate-500">{user?.email}</p>
             </div>
@@ -277,18 +278,21 @@ export default function DashboardPage() {
               </div>
             )}
           </div>
+          
           {user?.email === 'rc6542698@gmail.com' && (
             <Link 
               href="/admin" 
-              className="border border-indigo-500/30 bg-indigo-500/10 text-indigo-600 hover:bg-indigo-500/20 px-3 py-2 sm:px-4 sm:py-2 rounded-xl transition-all font-medium text-sm flex items-center gap-1.5 sm:gap-2"
+              className="border border-indigo-500/30 bg-indigo-500/10 text-indigo-600 hover:bg-indigo-500/20 px-2 sm:px-4 py-1.5 sm:py-2 rounded-xl transition-all font-medium text-sm flex items-center gap-1.5 sm:gap-2"
               title="Admin Panel"
             >
-              <span className="text-base sm:text-sm leading-none">👑</span>
+              <Crown className="w-5 h-5 text-amber-500 fill-amber-500/20 drop-shadow-sm" />
               <span className="hidden sm:inline">Admin Panel</span>
             </Link>
           )}
+          
           <TokenBox user={user} />
-          <button onClick={handleLogoutRequest} className="text-slate-500 hover:text-red-600 transition-all" title="Logout">
+          
+          <button onClick={handleLogoutRequest} className="text-slate-500 hover:text-red-600 transition-all p-1.5 sm:p-2" title="Logout">
             <LogOut className="w-5 h-5" />
           </button>
         </div>
