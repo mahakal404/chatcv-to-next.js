@@ -8,14 +8,14 @@ export default function AnimatedHeroMockup() {
     duration: 2,
     repeat: Infinity,
     repeatDelay: 1,
-    ease: "easeInOut"
+    ease: "easeInOut" as const
   };
 
   const previewTransition = {
     duration: 2,
     repeat: Infinity,
     repeatDelay: 1,
-    ease: "easeInOut",
+    ease: "easeInOut" as const,
     delay: 0.5 // Slight delay to simulate the resume updating after typing starts
   };
 
