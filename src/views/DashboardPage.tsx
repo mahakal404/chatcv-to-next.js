@@ -119,7 +119,7 @@ export default function DashboardPage() {
           accentColor: '#4f46e5'
         }
       });
-      router.push(`/builder/${docRef.id}`);
+      router.push(`/builder?id=${docRef.id}`);
     } catch (err) {
       console.error("Error creating resume:", err);
     }
@@ -353,7 +353,7 @@ export default function DashboardPage() {
                 whileHover={{ y: -4 }}
                 className="bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl hover:shadow-slate-100 transition-all group"
               >
-                <Link href={`/builder/${resume.id}`} className="block p-6">
+                <Link href={`/builder?id=${resume.id}`} className="block p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div className="bg-indigo-50 p-3 rounded-xl text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-all">
                       <FileText className="w-6 h-6" />

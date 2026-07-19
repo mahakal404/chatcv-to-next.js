@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { db } from '../firebase';
 import { doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
@@ -218,9 +218,8 @@ const INITIAL_DATA: ResumeData = {
 
 export default function BuilderPage() {
   const { user } = useAuth();
-  const params = useParams();
-  // Next.js [[...slug]] route: /builder → slug undefined, /builder/abc → slug=['abc']
-  const id = (params?.slug as string[] | undefined)?.[0];
+  const searchParams = useSearchParams();
+  const id = searchParams.get('id');
   const router = useRouter();
   const isGuest = !user;
   const [resume, setResume] = useState<Resume | null>(null);
