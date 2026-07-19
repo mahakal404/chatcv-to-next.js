@@ -18,11 +18,27 @@ export const metadata: Metadata = {
     'online CV maker',
     'ChatCV',
   ],
+  metadataBase: new URL('https://chatcv-app.netlify.app/'),
   openGraph: {
-    title: 'ChatCV — Free AI Resume Builder',
-    description:
-      'Build a professional ATS-friendly resume in minutes. Free, no watermarks, instant PDF export.',
+    title: 'ChatCV | Free AI Resume Builder',
+    description: 'Build a professional ATS-friendly resume in minutes.',
+    url: 'https://chatcv-app.netlify.app/',
+    siteName: 'ChatCV',
+    images: [
+      {
+        url: '/cv.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'ChatCV - AI Resume Builder Logo',
+      },
+    ],
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'ChatCV | Free AI Resume Builder',
+    description: 'Build a professional ATS-friendly resume in minutes.',
+    images: ['/cv.jpg'],
   },
   icons: {
     icon: '/chatcv_fevi.webp',
