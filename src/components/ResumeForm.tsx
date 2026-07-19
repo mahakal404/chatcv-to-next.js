@@ -24,8 +24,17 @@ export default function ResumeForm({ data, setData, onAIImprove }: ResumeFormPro
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const toggleSection = (section: string) => {
-    setActiveSection(activeSection === section ? null : section);
+  const toggleSection = (section: string, e?: React.MouseEvent) => {
+    const isOpening = activeSection !== section;
+    setActiveSection(isOpening ? section : null);
+
+    if (isOpening && e?.currentTarget) {
+      const element = e.currentTarget as HTMLElement;
+      // Wait for layout animation to expand slightly before calculating scroll
+      setTimeout(() => {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 100);
+    }
   };
 
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -229,7 +238,7 @@ export default function ResumeForm({ data, setData, onAIImprove }: ResumeFormPro
       {/* Personal Info */}
       <div className="border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm">
         <button
-          onClick={() => toggleSection('personal')}
+          onClick={(e) => toggleSection('personal', e)}
           className="w-full px-6 py-4 flex items-center justify-between bg-white hover:bg-slate-50 transition-all"
         >
           <div className="flex items-center gap-3">
@@ -372,7 +381,7 @@ export default function ResumeForm({ data, setData, onAIImprove }: ResumeFormPro
       {/* Summary */}
       <div className="border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm">
         <button
-          onClick={() => toggleSection('summary')}
+          onClick={(e) => toggleSection('summary', e)}
           className="w-full px-6 py-4 flex items-center justify-between bg-white hover:bg-slate-50 transition-all"
         >
           <div className="flex items-center gap-3">
@@ -412,7 +421,7 @@ export default function ResumeForm({ data, setData, onAIImprove }: ResumeFormPro
       {/* Work Experience */}
       <div className="border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm">
         <button
-          onClick={() => toggleSection('experience')}
+          onClick={(e) => toggleSection('experience', e)}
           className="w-full px-6 py-4 flex items-center justify-between bg-white hover:bg-slate-50 transition-all"
         >
           <div className="flex items-center gap-3">
@@ -502,7 +511,7 @@ export default function ResumeForm({ data, setData, onAIImprove }: ResumeFormPro
       {/* Education */}
       <div className="border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm">
         <button
-          onClick={() => toggleSection('education')}
+          onClick={(e) => toggleSection('education', e)}
           className="w-full px-6 py-4 flex items-center justify-between bg-white hover:bg-slate-50 transition-all"
         >
           <div className="flex items-center gap-3">
@@ -670,7 +679,7 @@ export default function ResumeForm({ data, setData, onAIImprove }: ResumeFormPro
       {/* Certifications */}
       <div className="border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm">
         <button
-          onClick={() => toggleSection('certifications')}
+          onClick={(e) => toggleSection('certifications', e)}
           className="w-full px-6 py-4 flex items-center justify-between bg-white hover:bg-slate-50 transition-all"
         >
           <div className="flex items-center gap-3">
@@ -763,7 +772,7 @@ export default function ResumeForm({ data, setData, onAIImprove }: ResumeFormPro
           </div>
         </div>
         <button
-          onClick={() => toggleSection('skills')}
+          onClick={(e) => toggleSection('skills', e)}
           className="w-full px-6 py-4 flex items-center justify-between bg-white hover:bg-slate-50 transition-all"
         >
           <div className="flex items-center gap-3">
@@ -885,7 +894,7 @@ export default function ResumeForm({ data, setData, onAIImprove }: ResumeFormPro
           </div>
         </div>
         <button
-          onClick={() => toggleSection('languages')}
+          onClick={(e) => toggleSection('languages', e)}
           className="w-full px-6 py-4 flex items-center justify-between bg-white hover:bg-slate-50 transition-all"
         >
           <div className="flex items-center gap-3">
@@ -944,7 +953,7 @@ export default function ResumeForm({ data, setData, onAIImprove }: ResumeFormPro
       {/* Projects */}
       <div className="border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm">
         <button
-          onClick={() => toggleSection('projects')}
+          onClick={(e) => toggleSection('projects', e)}
           className="w-full px-6 py-4 flex items-center justify-between bg-white hover:bg-slate-50 transition-all"
         >
           <div className="flex items-center gap-3">
@@ -1010,7 +1019,7 @@ export default function ResumeForm({ data, setData, onAIImprove }: ResumeFormPro
       {/* Custom Sections */}
       <div className="border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm">
         <button
-          onClick={() => toggleSection('custom')}
+          onClick={(e) => toggleSection('custom', e)}
           className="w-full px-6 py-4 flex items-center justify-between bg-white hover:bg-slate-50 transition-all"
         >
           <div className="flex items-center gap-3">
