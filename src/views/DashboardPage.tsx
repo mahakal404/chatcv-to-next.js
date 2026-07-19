@@ -260,11 +260,30 @@ export default function DashboardPage() {
       </AnimatePresence>
       {/* Header */}
       <header className="flex justify-between items-center w-full px-4 py-3 bg-white border-b border-gray-100 sticky top-0 z-50">
-        <Link href="/" className="flex items-center flex-shrink-0 hover:opacity-90 transition-opacity">
-          <img src={desktopLogo} alt="ChatCV Logo" className="h-10 w-auto object-contain" />
-        </Link>
         
-        <div className="flex items-center gap-2 sm:gap-4">
+        {/* Left: Logo */}
+        <div className="flex flex-1 justify-start">
+          <Link href="/" className="inline-flex items-center flex-shrink-0 hover:opacity-90 transition-opacity">
+            <img src={desktopLogo} alt="ChatCV Logo" className="h-10 w-auto object-contain" />
+          </Link>
+        </div>
+        
+        {/* Center: Admin Crown */}
+        <div className="flex flex-1 justify-center">
+          {user?.email === 'rc6542698@gmail.com' && (
+            <Link 
+              href="/admin" 
+              className="border border-amber-400/30 bg-amber-500/10 text-amber-600 hover:bg-amber-500/20 px-2 sm:px-4 py-1.5 sm:py-2 rounded-xl transition-all font-medium text-sm flex items-center gap-1.5 sm:gap-2 shadow-sm"
+              title="Admin Panel"
+            >
+              <Crown className="w-5 h-5 text-amber-400 drop-shadow-[0_0_8px_rgba(251,191,36,0.8)] animate-pulse" />
+              <span className="hidden sm:inline font-bold">Admin</span>
+            </Link>
+          )}
+        </div>
+        
+        {/* Right: Controls & Profile */}
+        <div className="flex flex-1 items-center justify-end gap-2 sm:gap-4">
           <div className="hidden sm:flex items-center gap-3 mr-2">
             <div className="text-right">
               <p className="text-sm font-bold text-slate-900">{user?.displayName || 'User'}</p>
@@ -278,17 +297,6 @@ export default function DashboardPage() {
               </div>
             )}
           </div>
-          
-          {user?.email === 'rc6542698@gmail.com' && (
-            <Link 
-              href="/admin" 
-              className="border border-indigo-500/30 bg-indigo-500/10 text-indigo-600 hover:bg-indigo-500/20 px-2 sm:px-4 py-1.5 sm:py-2 rounded-xl transition-all font-medium text-sm flex items-center gap-1.5 sm:gap-2"
-              title="Admin Panel"
-            >
-              <Crown className="w-5 h-5 text-amber-500 fill-amber-500/20 drop-shadow-sm" />
-              <span className="hidden sm:inline">Admin Panel</span>
-            </Link>
-          )}
           
           <TokenBox user={user} />
           
