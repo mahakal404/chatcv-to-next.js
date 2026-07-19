@@ -56,19 +56,19 @@ export default function LandingPage() {
     <div className="min-h-screen bg-magic-gradient font-sans">
       {/* Navbar */}
       <header className={`fixed top-0 left-0 w-full z-50 transition-transform duration-300 bg-white/80 backdrop-blur-md border-b border-gray-100 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
-        <div className="container mx-auto px-6 py-4 flex flex-row justify-between items-center w-full">
+        <div className="container mx-auto px-4 md:px-6 py-4 flex flex-row justify-between items-center w-full">
           <Link href="/" className="flex items-center flex-shrink-0">
-            <img src={desktopLogo} alt="ChatCV Logo" className="h-12 md:h-16 w-auto object-contain" />
+            <img src={desktopLogo} alt="ChatCV Logo" className="h-10 md:h-16 w-auto object-contain" />
           </Link>
-          <div className="flex items-center justify-end gap-3">
+          <div className="flex items-center justify-end gap-2 sm:gap-4">
             {!user && (
-              <Link href="/login" className="hidden sm:block text-slate-600 font-semibold hover:text-brand-purple transition-all whitespace-nowrap">
+              <Link href="/login" className="text-sm md:text-base font-medium text-slate-600 hover:text-slate-900 transition-all whitespace-nowrap">
                 Sign In
               </Link>
             )}
             <Link 
               href={user ? "/dashboard" : "/builder"} 
-              className="bg-brand-dark text-white px-5 md:px-6 py-2 md:py-2.5 rounded-full text-sm md:text-base font-bold hover:bg-slate-800 transition-all shadow-lg shadow-slate-900/10 whitespace-nowrap"
+              className="bg-brand-dark text-white px-3 py-1.5 md:px-5 md:py-2.5 rounded-full text-sm md:text-base font-bold hover:bg-slate-800 transition-all shadow-lg shadow-slate-900/10 whitespace-nowrap"
             >
               {user ? 'Dashboard' : 'Get Started'}
             </Link>
