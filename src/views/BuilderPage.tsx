@@ -25,7 +25,7 @@ const GUEST_DATA_KEY = 'chatcv_guest_data';
 
 import { BlobProvider } from '@react-pdf/renderer';
 import ClassicTemplatePDF from '../components/templates/ClassicTemplatePDF';
-import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
+
 
 const desktopLogo = '/chatcv_desk.webp';
 
@@ -63,6 +63,11 @@ function MobilePDFPreview({ blobUrl, loading: pdfLoading }: { blobUrl: string | 
       try {
         const response = await fetch(blobUrl);
         const arrayBuffer = await response.arrayBuffer();
+        
+        // Dynamically import pdfjs-dist to avoid Next.js Webpack initialization crashes
+        const pdfjsLib = await import('pdfjs-dist/legacy/build/pdf.mjs');
+        pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`;
+        
         const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
         const images: string[] = [];
 
@@ -245,9 +250,8 @@ export default function BuilderPage() {
   const draftKey = isGuest ? GUEST_DATA_KEY : (id ? `chatCV_draft_${id}` : null);
 
   // ─── Configure pdf.js worker (browser-only, safe inside useEffect) ────
-  useEffect(() => {
-    pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`;
-  }, []);
+  // Removed top-level useEffect for pdfjsLib worker configuration.
+  // This is now handled dynamically when the PDF preview actually renders.
 
   // ─── Fix 2: Master Debounce (1s delay + Deep Clone) ───────────
   // Deep-cloning breaks object reference equality so React-PDF
