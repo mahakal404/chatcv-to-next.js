@@ -7,6 +7,7 @@ import { FileText, Sparkles, Layout, Download, Zap, Wand2, ChevronDown, CheckCir
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import RNEXTSignature from '@/components/branding/RNEXTSignature';
+import AnimatedHeroMockup from '@/components/AnimatedHeroMockup';
 
 const desktopLogo = '/chatcv_desk.webp';
 
@@ -111,84 +112,13 @@ export default function LandingPage() {
             </Link>
           </div>
 
-          {/* Resume Mockup Section */}
+          {/* Animated Resume Mockup Section */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
-            className="mt-20 w-full max-w-4xl mx-auto relative group"
           >
-            {/* Background Glow */}
-            <div className="absolute -inset-4 bg-gradient-to-r from-brand-purple/20 via-brand-pink/20 to-brand-indigo/20 rounded-[40px] blur-3xl opacity-50 group-hover:opacity-100 transition-opacity duration-1000" />
-            
-            {/* Mockup Container */}
-            <div className="relative bg-white rounded-[32px] shadow-2xl shadow-slate-200/50 border border-slate-100 overflow-hidden aspect-[1.4/1] md:aspect-[1.6/1] flex">
-              {/* Sidebar */}
-              <div className="w-1/3 bg-slate-50 border-r border-slate-100 p-8 hidden md:block">
-                <div className="w-20 h-20 rounded-2xl bg-brand-purple/10 mb-6 flex items-center justify-center">
-                  <User className="w-10 h-10 text-brand-purple" />
-                </div>
-                <div className="space-y-4">
-                  <div className="h-4 w-full bg-slate-200 rounded-full" />
-                  <div className="h-4 w-3/4 bg-slate-200 rounded-full" />
-                  <div className="pt-8 space-y-3">
-                    <div className="h-3 w-1/2 bg-brand-purple/20 rounded-full" />
-                    <div className="h-2 w-full bg-slate-100 rounded-full" />
-                    <div className="h-2 w-full bg-slate-100 rounded-full" />
-                    <div className="h-2 w-5/6 bg-slate-100 rounded-full" />
-                  </div>
-                  <div className="pt-8 space-y-3">
-                    <div className="h-3 w-1/2 bg-brand-purple/20 rounded-full" />
-                    <div className="h-2 w-full bg-slate-100 rounded-full" />
-                    <div className="h-2 w-full bg-slate-100 rounded-full" />
-                  </div>
-                </div>
-              </div>
-
-              {/* Main Content */}
-              <div className="flex-1 p-8 md:p-12 text-left">
-                <div className="mb-10">
-                  <div className="h-10 w-2/3 bg-slate-900 rounded-xl mb-4" />
-                  <div className="h-4 w-1/3 bg-brand-purple rounded-full" />
-                </div>
-
-                <div className="space-y-10">
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 rounded-full bg-brand-purple" />
-                      <div className="h-4 w-1/4 bg-slate-200 rounded-full" />
-                    </div>
-                    <div className="pl-5 space-y-2">
-                      <div className="h-3 w-full bg-slate-100 rounded-full" />
-                      <div className="h-3 w-full bg-slate-100 rounded-full" />
-                      <div className="h-3 w-4/5 bg-slate-100 rounded-full" />
-                    </div>
-                  </div>
-
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 rounded-full bg-brand-purple" />
-                      <div className="h-4 w-1/4 bg-slate-200 rounded-full" />
-                    </div>
-                    <div className="pl-5 space-y-2">
-                      <div className="h-3 w-full bg-slate-100 rounded-full" />
-                      <div className="h-3 w-full bg-slate-100 rounded-full" />
-                      <div className="h-3 w-3/4 bg-slate-100 rounded-full" />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Floating Badge */}
-                <div className="absolute bottom-8 right-8 bg-brand-dark text-white px-6 py-3 rounded-2xl flex items-center gap-3 shadow-2xl animate-bounce">
-                  <CheckCircle2 className="w-5 h-5 text-green-400" />
-                  <span className="text-sm font-bold">ATS Score: 98/100</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Decorative Elements */}
-            <div className="absolute -top-6 -right-6 w-24 h-24 bg-brand-pink/10 rounded-full blur-2xl" />
-            <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-brand-indigo/10 rounded-full blur-2xl" />
+            <AnimatedHeroMockup />
           </motion.div>
         </div>
       </motion.section>
