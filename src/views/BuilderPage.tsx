@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { db } from '../firebase';
 import { doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
-import { ChevronLeft, Save, Download, Layout, Palette, Eye, Edit3, Sparkles, Loader2, ZoomIn, ZoomOut, RotateCcw, CheckCircle2, Cloud, Pencil, RefreshCw, AlertTriangle, LogIn, Coins, Play, X as XIcon, Home } from 'lucide-react';
+import { ChevronLeft, Save, Download, Layout, LayoutDashboard, Palette, Eye, Edit3, Sparkles, Loader2, ZoomIn, ZoomOut, RotateCcw, CheckCircle2, Cloud, Pencil, RefreshCw, AlertTriangle, LogIn, Coins, Play, X as XIcon, Home } from 'lucide-react';
 import { toast } from 'sonner';
 import { handleFirestoreError, OperationType } from '../lib/firestore-errors';
 import { ResumeData, Resume } from '../types';
@@ -606,29 +606,29 @@ export default function BuilderPage() {
       </header>
 
       {/* Mobile Bottom Navigation Bar (Native App Style) */}
-      <div className="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-50 px-2 py-1 flex justify-around items-center shadow-[0_-4px_10px_-1px_rgba(0,0,0,0.05)]">
+      <div className="md:hidden fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur-md border-t border-gray-100 shadow-[0_-4px_20px_-5px_rgba(0,0,0,0.1)] z-50 flex justify-around items-center px-2 py-3 pb-safe">
         <Link 
           href="/dashboard"
-          className="flex flex-col items-center justify-center p-3 text-slate-400 hover:text-indigo-600 transition-all active:scale-95"
+          className="text-gray-400 hover:text-gray-600 p-2 transition-all duration-300 active:scale-95"
         >
-          <Layout className="w-6 h-6" />
+          <LayoutDashboard className="w-6 h-6" />
         </Link>
         <button
           onClick={() => setViewMode('edit')}
-          className={`flex flex-col items-center justify-center p-3 transition-all active:scale-95 ${viewMode === 'edit' ? 'text-indigo-600' : 'text-slate-400 hover:text-indigo-600'}`}
+          className={`active:scale-95 ${viewMode === 'edit' ? 'text-indigo-600 bg-indigo-50 p-2 rounded-full transition-all duration-300' : 'text-gray-400 hover:text-gray-600 p-2 transition-all duration-300'}`}
         >
           <Edit3 className="w-6 h-6" />
         </button>
         <button
           onClick={() => setViewMode('preview')}
-          className={`flex flex-col items-center justify-center p-3 transition-all active:scale-95 ${viewMode === 'preview' ? 'text-indigo-600' : 'text-slate-400 hover:text-indigo-600'}`}
+          className={`active:scale-95 ${viewMode === 'preview' ? 'text-indigo-600 bg-indigo-50 p-2 rounded-full transition-all duration-300' : 'text-gray-400 hover:text-gray-600 p-2 transition-all duration-300'}`}
         >
           <Eye className="w-6 h-6" />
         </button>
         <button
           onClick={handleSave}
           disabled={saving}
-          className={`flex flex-col items-center justify-center p-3 transition-all active:scale-95 ${saving ? 'opacity-50' : ''} text-slate-400 hover:text-indigo-600`}
+          className={`active:scale-95 ${saving ? 'opacity-50' : ''} text-gray-400 hover:text-gray-600 p-2 transition-all duration-300`}
         >
           {saving ? <Loader2 className="w-6 h-6 animate-spin" /> : isGuest ? <LogIn className="w-6 h-6" /> : <Save className="w-6 h-6" />}
         </button>
