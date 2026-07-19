@@ -56,19 +56,19 @@ export default function LandingPage() {
     <div className="min-h-screen bg-magic-gradient font-sans">
       {/* Navbar */}
       <header className={`fixed top-0 left-0 w-full z-50 transition-transform duration-300 bg-white/80 backdrop-blur-md border-b border-gray-100 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
-        <div className="container mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-0">
+        <div className="container mx-auto px-6 py-4 flex flex-row justify-between items-center w-full">
           <Link href="/" className="flex items-center flex-shrink-0">
-            <img src={desktopLogo} alt="ChatCV Logo" className="h-16 w-auto object-contain" />
+            <img src={desktopLogo} alt="ChatCV Logo" className="h-12 md:h-16 w-auto object-contain" />
           </Link>
-          <div className="flex items-center justify-center gap-3 w-full md:w-auto">
+          <div className="flex items-center justify-end gap-3">
             {!user && (
-              <Link href="/login" className="text-slate-600 font-semibold hover:text-brand-purple transition-all whitespace-nowrap">
+              <Link href="/login" className="hidden sm:block text-slate-600 font-semibold hover:text-brand-purple transition-all whitespace-nowrap">
                 Sign In
               </Link>
             )}
             <Link 
               href={user ? "/dashboard" : "/builder"} 
-              className="bg-brand-dark text-white px-6 py-2.5 rounded-full font-bold hover:bg-slate-800 transition-all shadow-lg shadow-slate-900/10 whitespace-nowrap"
+              className="bg-brand-dark text-white px-5 md:px-6 py-2 md:py-2.5 rounded-full text-sm md:text-base font-bold hover:bg-slate-800 transition-all shadow-lg shadow-slate-900/10 whitespace-nowrap"
             >
               {user ? 'Dashboard' : 'Get Started'}
             </Link>
@@ -77,28 +77,46 @@ export default function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <motion.section 
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-50px" }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="px-8 py-20 lg:py-32 flex flex-col items-center text-center max-w-5xl mx-auto pt-32 lg:pt-40"
-      >
-        <div>
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-purple/10 text-brand-purple text-xs font-bold uppercase tracking-widest mb-8 border border-brand-purple/20">
-            <Sparkles className="w-3 h-3" />
-            AI-Powered CV Maker & Resume Builder
-          </div>
-          <h1 className="text-6xl lg:text-8xl font-black text-slate-900 leading-[0.9] tracking-tighter mb-8">
-            Free AI Resume Builder & <span className="text-magic-gradient">ATS-Friendly</span> CV Maker
-          </h1>
-          <p className="text-xl text-slate-500 mb-12 max-w-2xl mx-auto leading-relaxed font-medium">
-            Stop struggling with formatting and writer's block. Build a professional, ATS-friendly resume in minutes using our intuitive <strong>Free Online Resume</strong> builder or just by chatting with our AI.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-6 justify-center">
+      {/* Hero Section */}
+      <section className="px-8 py-20 lg:py-32 flex flex-col items-center text-center max-w-5xl mx-auto pt-32 lg:pt-40 relative">
+        {/* Ambient Glow Background */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[800px] h-[600px] bg-gradient-to-r from-purple-500/20 via-pink-500/10 to-blue-500/20 blur-[120px] -z-10 rounded-full" />
+        
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: {},
+            visible: { transition: { staggerChildren: 0.15 } }
+          }}
+          className="relative z-10 w-full"
+        >
+          <motion.div variants={{ hidden: { opacity: 0, y: 30, scale: 0.95 }, visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: "easeOut" } } }}>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-purple/10 text-brand-purple text-xs font-bold uppercase tracking-widest mb-8 border border-brand-purple/20">
+              <Sparkles className="w-3 h-3" />
+              AI-Powered CV Maker & Resume Builder
+            </div>
+          </motion.div>
+
+          <motion.div variants={{ hidden: { opacity: 0, y: 30, scale: 0.95 }, visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: "easeOut" } } }}>
+            <h1 className="text-6xl lg:text-8xl font-black text-slate-900 leading-[0.9] tracking-tighter mb-8 drop-shadow-sm">
+              Free AI Resume Builder & <span className="text-magic-gradient">ATS-Friendly</span> CV Maker
+            </h1>
+          </motion.div>
+
+          <motion.div variants={{ hidden: { opacity: 0, y: 30, scale: 0.95 }, visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: "easeOut" } } }}>
+            <p className="text-xl text-slate-500 mb-12 max-w-2xl mx-auto leading-relaxed font-medium">
+              Stop struggling with formatting and writer's block. Build a professional, ATS-friendly resume in minutes using our intuitive <strong>Free Online Resume</strong> builder or just by chatting with our AI.
+            </p>
+          </motion.div>
+
+          <motion.div 
+            variants={{ hidden: { opacity: 0, y: 30, scale: 0.95 }, visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: "easeOut" } } }}
+            className="flex flex-col sm:flex-row gap-6 justify-center"
+          >
             <Link 
               href="/builder" 
-              className="bg-button-gradient text-white px-10 py-5 rounded-2xl text-lg font-black flex items-center gap-3 hover:scale-105 transition-all magic-button-glow"
+              className="bg-button-gradient text-white px-10 py-5 rounded-2xl text-lg font-black flex items-center gap-3 hover:scale-105 transition-all magic-button-glow hover:shadow-[0_0_30px_rgba(139,92,246,0.6)]"
             >
               <Sparkles className="w-6 h-6" />
               Magic AI Builder
@@ -110,18 +128,16 @@ export default function LandingPage() {
               <FileText className="w-6 h-6" />
               Standard (Manual)
             </Link>
-          </div>
+          </motion.div>
 
           {/* Animated Resume Mockup Section */}
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.8 }}
+            variants={{ hidden: { opacity: 0, y: 30, scale: 0.95 }, visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.8, ease: "easeOut" } } }}
           >
             <AnimatedHeroMockup />
           </motion.div>
-        </div>
-      </motion.section>
+        </motion.div>
+      </section>
 
       {/* Features Section */}
       <section className="px-8 py-20">
