@@ -3,7 +3,7 @@
 import React, { useState, useRef } from 'react';
 import { ResumeData, Experience, Education, Project, Certification, Skill, Language } from '../types';
 import { motion, AnimatePresence } from 'motion/react';
-import { User, Briefcase, GraduationCap, Code, Folder, Sparkles, Plus, Trash2, ChevronDown, ChevronUp, Award, Calculator, ExternalLink, Layers, Languages, Camera, Image as ImageIcon, CheckCircle2, X } from 'lucide-react';
+import { User, Briefcase, GraduationCap, Code, Folder, Sparkles, Plus, Trash2, ChevronDown, ChevronUp, Award, Calculator, ExternalLink, Layers, Languages, Camera, Image as ImageIcon, CheckCircle2, X, Copy } from 'lucide-react';
 import Cropper from 'react-easy-crop';
 import getCroppedImg from '../utils/cropImage';
 
@@ -21,8 +21,17 @@ export default function ResumeForm({ data, setData, onAIImprove }: ResumeFormPro
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
+  const [copiedPrompt, setCopiedPrompt] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const aiPromptText = "I need a professional summary for my resume. Here are my details: [Role/Job Title]. I have [X] years of experience in [Skills]. Please make it 3-4 lines, professional, and ATS-friendly.";
+
+  const handleCopyPrompt = () => {
+    navigator.clipboard.writeText(aiPromptText);
+    setCopiedPrompt(true);
+    setTimeout(() => setCopiedPrompt(false), 2000);
+  };
 
   const toggleSection = (section: string, e?: React.MouseEvent) => {
     const isOpening = activeSection !== section;
@@ -409,9 +418,31 @@ export default function ResumeForm({ data, setData, onAIImprove }: ResumeFormPro
                   onClick={handleAIImproveSummary}
                   className="absolute bottom-4 right-4 bg-indigo-600 text-white p-2 rounded-lg hover:bg-indigo-700 transition-all flex items-center gap-2 text-xs font-bold"
                 >
-                  <Sparkles className="w-3 h-3" />
-                  AI Improve
+                  <Sparkles className="w-4 h-4" /> AI Improve
                 </button>
+              </div>
+
+              {/* AI Prompt Guide */}
+              <div className="mt-4 bg-indigo-50 p-3 rounded-lg border border-indigo-100">
+                <p className="text-xs text-indigo-800 mb-2 font-medium">
+                  💡 Not sure what to write? AI से समरी लिखवाने के लिए कॉपी करें:
+                </p>
+                <div className="flex items-center gap-2 bg-white p-2 rounded border border-gray-200">
+                  <p className="text-xs font-mono text-gray-600 flex-1 truncate" title={aiPromptText}>
+                    {aiPromptText}
+                  </p>
+                  <button 
+                    onClick={handleCopyPrompt}
+                    className="flex-shrink-0 text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 p-1.5 rounded transition-all flex items-center gap-1"
+                    title="Copy Prompt"
+                  >
+                    {copiedPrompt ? (
+                      <span className="text-[10px] font-bold text-green-600 flex items-center gap-1"><CheckCircle2 className="w-3 h-3"/> Copied!</span>
+                    ) : (
+                      <Copy className="w-4 h-4" />
+                    )}
+                  </button>
+                </div>
               </div>
             </motion.div>
           )}
