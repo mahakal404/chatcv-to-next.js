@@ -6,13 +6,13 @@ import { motion, AnimatePresence } from 'motion/react';
 import { FileText, Sparkles, Layout, Download, Zap, Wand2, ChevronDown, CheckCircle2, ArrowRight, ShieldCheck, Globe, HelpCircle, User } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import RNEXTSignature from '@/components/branding/RNEXTSignature';
 
 const desktopLogo = '/chatcv_desk.webp';
 
 export default function LandingPage() {
   const { user } = useAuth();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [isRnextModalOpen, setIsRnextModalOpen] = useState(false);
   const router = useRouter();
 
   const faqs = [
@@ -356,74 +356,9 @@ export default function LandingPage() {
             © {new Date().getFullYear()} ChatCV. All rights reserved.
           </p>
           
-          <div className="flex items-center text-slate-400 mt-2 sm:mt-0">
-            <span className="hidden md:block mx-2 text-slate-500">•</span>
-            <p className="text-sm font-medium flex items-center gap-1.5">
-              Built by
-              <span 
-                onClick={() => setIsRnextModalOpen(true)}
-                className="relative group cursor-pointer ml-1"
-              >
-                {/* Text with Neon Glow on Hover */}
-                <span className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-indigo-500 tracking-wider transition-all duration-500 group-hover:from-blue-400 group-hover:to-indigo-400 group-hover:drop-shadow-[0_0_10px_rgba(99,102,241,0.8)]">
-                  RNEXT
-                </span>
-                {/* Expanding Line with Electric Neon Shadow */}
-                <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-gradient-to-r from-blue-500 to-indigo-500 transition-all duration-500 ease-out group-hover:w-full rounded-full group-hover:shadow-[0_0_8px_2px_rgba(79,70,229,0.6)] group-hover:h-[3px]"></span>
-              </span>
-            </p>
-          </div>
+          <RNEXTSignature />
         </div>
       </footer>
-
-      {/* RNEXT Confirmation Modal */}
-      <AnimatePresence>
-        {isRnextModalOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm"
-          >
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0, y: 10 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.95, opacity: 0, y: 10 }}
-              className="bg-white/90 backdrop-blur-xl border border-white/50 shadow-2xl rounded-2xl p-6 max-w-md w-full relative overflow-hidden"
-            >
-              {/* Premium Glow Effect */}
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500"></div>
-              
-              <div className="flex flex-col items-center text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-2xl flex items-center justify-center mb-4 shadow-inner">
-                  <Globe className="w-8 h-8 text-indigo-600" />
-                </div>
-                <h3 className="text-xl font-bold text-slate-800 mb-2">Visit Developer Portfolio?</h3>
-                <p className="text-slate-500 mb-6 text-sm">
-                  You are about to visit the professional portfolio of <span className="font-semibold text-slate-700">RNEXT</span>. Would you like to continue in a new tab?
-                </p>
-                <div className="flex w-full gap-3">
-                  <button
-                    onClick={() => setIsRnextModalOpen(false)}
-                    className="flex-1 py-2.5 rounded-xl font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors"
-                  >
-                    Cancel
-                  </button>
-                  <a
-                    href="https://rnextin.netlify.app/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => setIsRnextModalOpen(false)}
-                    className="flex-1 py-2.5 rounded-xl font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg shadow-indigo-200 flex items-center justify-center gap-2 transition-all hover:scale-[1.02]"
-                  >
-                    Visit <ArrowRight className="w-4 h-4" />
-                  </a>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }
