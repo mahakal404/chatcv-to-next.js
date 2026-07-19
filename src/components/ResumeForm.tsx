@@ -3,7 +3,7 @@
 import React, { useState, useRef } from 'react';
 import { ResumeData, Experience, Education, Project, Certification, Skill, Language } from '../types';
 import { motion, AnimatePresence } from 'motion/react';
-import { User, Briefcase, GraduationCap, Code, Folder, Sparkles, Plus, Trash2, ChevronDown, ChevronUp, Award, Calculator, ExternalLink, Layers, Languages, Camera, Image as ImageIcon, CheckCircle2, X, Copy } from 'lucide-react';
+import { User, Briefcase, GraduationCap, Code, Folder, Sparkles, Plus, Trash2, ChevronDown, ChevronUp, Award, Calculator, ExternalLink, Layers, Languages, Camera, Image as ImageIcon, CheckCircle2, X, Copy, Lightbulb } from 'lucide-react';
 import Cropper from 'react-easy-crop';
 import getCroppedImg from '../utils/cropImage';
 
@@ -412,7 +412,7 @@ export default function ResumeForm({ data, setData, onAIImprove }: ResumeFormPro
                   value={data.summary || ''}
                   onChange={(e) => setData({ ...data, summary: e.target.value })}
                   className="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 min-h-[120px]"
-                  placeholder="Briefly describe your professional background and key achievements..."
+                  placeholder="Example: Motivated Software Engineer with 2+ years of experience in React.js... focusing on clean code and performance."
                 />
                 <button
                   onClick={handleAIImproveSummary}
@@ -423,17 +423,22 @@ export default function ResumeForm({ data, setData, onAIImprove }: ResumeFormPro
               </div>
 
               {/* AI Prompt Guide */}
-              <div className="mt-4 bg-indigo-50 p-3 rounded-lg border border-indigo-100">
-                <p className="text-xs text-indigo-800 mb-2 font-medium">
-                  💡 Not sure what to write? AI से समरी लिखवाने के लिए कॉपी करें:
-                </p>
-                <div className="flex items-center gap-2 bg-white p-2 rounded border border-gray-200">
-                  <p className="text-xs font-mono text-gray-600 flex-1 truncate" title={aiPromptText}>
+              <div className="mt-4 bg-indigo-50/70 p-4 rounded-xl border border-indigo-100">
+                <div className="flex items-start gap-2 mb-3">
+                  <Lightbulb className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
+                  <p className="text-xs text-indigo-900 font-medium leading-relaxed">
+                    प्रोफेशनल समरी में अपना रोल, अनुभव और मुख्य स्किल्स लिखें। <br />
+                    <span className="text-indigo-700/80">(Write your role, experience, and key skills.)</span>
+                  </p>
+                </div>
+                
+                <div className="flex items-center gap-2 bg-white p-2.5 rounded-lg border border-indigo-100 shadow-sm mb-3">
+                  <p className="text-xs font-mono text-slate-600 flex-1 truncate" title={aiPromptText}>
                     {aiPromptText}
                   </p>
                   <button 
                     onClick={handleCopyPrompt}
-                    className="flex-shrink-0 text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 p-1.5 rounded transition-all flex items-center gap-1"
+                    className="flex-shrink-0 text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 p-1.5 rounded-md transition-all flex items-center gap-1"
                     title="Copy Prompt"
                   >
                     {copiedPrompt ? (
@@ -442,6 +447,21 @@ export default function ResumeForm({ data, setData, onAIImprove }: ResumeFormPro
                       <Copy className="w-4 h-4" />
                     )}
                   </button>
+                </div>
+                
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mt-2 pt-3 border-t border-indigo-100/60">
+                  <span className="text-xs font-bold text-indigo-800">जल्दी से AI से लिखवाएं:</span>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <a href="https://chatgpt.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-[10px] font-bold bg-white text-slate-700 border border-slate-200 px-2 py-1 rounded hover:bg-slate-50 hover:text-indigo-600 transition-all shadow-sm">
+                      <ExternalLink className="w-3 h-3" /> ChatGPT
+                    </a>
+                    <a href="https://gemini.google.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-[10px] font-bold bg-white text-slate-700 border border-slate-200 px-2 py-1 rounded hover:bg-slate-50 hover:text-indigo-600 transition-all shadow-sm">
+                      <ExternalLink className="w-3 h-3" /> Gemini
+                    </a>
+                    <a href="https://aistudio.google.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-[10px] font-bold bg-white text-slate-700 border border-slate-200 px-2 py-1 rounded hover:bg-slate-50 hover:text-indigo-600 transition-all shadow-sm">
+                      <ExternalLink className="w-3 h-3" /> Google AI
+                    </a>
+                  </div>
                 </div>
               </div>
             </motion.div>
