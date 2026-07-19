@@ -25,7 +25,7 @@ const GUEST_DATA_KEY = 'chatcv_guest_data';
 
 import { BlobProvider } from '@react-pdf/renderer';
 import ClassicTemplatePDF from '../components/templates/ClassicTemplatePDF';
-import * as pdfjsLib from 'pdfjs-dist';
+import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
 
 const desktopLogo = '/chatcv_desk.webp';
 
