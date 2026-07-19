@@ -1,12 +1,9 @@
-'use client';
+import BuilderClient from './BuilderClient';
 
-import dynamic from 'next/dynamic';
-
-// Disable SSR for the PDF builder to prevent Node.js crashes
-const BuilderPage = dynamic(() => import('@/views/BuilderPage'), {
-  ssr: false,
-});
+export function generateStaticParams() {
+  return [{ slug: [] }];
+}
 
 export default function BuilderRoute() {
-  return <BuilderPage/>;
+  return <BuilderClient />;
 }

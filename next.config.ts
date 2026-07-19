@@ -2,6 +2,7 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  output: 'export',
   webpack: (config) => {
     // @react-pdf/renderer uses canvas under the hood — alias it away on server
     config.resolve.alias = {
