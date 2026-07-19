@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { db } from '../firebase';
 import { doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
-import { ChevronLeft, Save, Download, Layout, Palette, Eye, Edit3, Sparkles, Loader2, ZoomIn, ZoomOut, RotateCcw, CheckCircle2, Cloud, Pencil, RefreshCw, AlertTriangle, LogIn, Coins, Play, X as XIcon } from 'lucide-react';
+import { ChevronLeft, Save, Download, Layout, Palette, Eye, Edit3, Sparkles, Loader2, ZoomIn, ZoomOut, RotateCcw, CheckCircle2, Cloud, Pencil, RefreshCw, AlertTriangle, LogIn, Coins, Play, X as XIcon, Home } from 'lucide-react';
 import { toast } from 'sonner';
 import { handleFirestoreError, OperationType } from '../lib/firestore-errors';
 import { ResumeData, Resume } from '../types';
@@ -521,8 +521,11 @@ export default function BuilderPage() {
           <Link href={isGuest ? '/' : '/dashboard'} className="p-2 hover:bg-slate-100 rounded-lg transition-all text-slate-500">
             <ChevronLeft className="w-5 h-5" />
           </Link>
-          <Link href="/" className="flex items-center flex-shrink-0 hover:opacity-90 transition-opacity">
+          <Link href="/" className="hidden md:flex items-center flex-shrink-0 hover:opacity-90 transition-opacity">
             <img src={desktopLogo} alt="ChatCV Logo" className="h-8 w-auto object-contain" />
+          </Link>
+          <Link href="/" className="md:hidden p-2 hover:bg-slate-100 rounded-lg transition-all text-slate-500">
+            <Home className="w-5 h-5" />
           </Link>
           <div className="h-6 w-px bg-slate-200 hidden sm:block" />
           <div className="hidden sm:block">
@@ -564,45 +567,30 @@ export default function BuilderPage() {
           {isGuest && (
             <Link
               href="/login"
-              className="hidden sm:flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-700 px-3 py-1.5 rounded-xl text-xs font-bold hover:bg-amber-100 transition-all"
+              className="hidden md:flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-700 px-3 py-1.5 rounded-xl text-xs font-bold hover:bg-amber-100 transition-all"
             >
               <LogIn className="w-3.5 h-3.5" />
               Sign in to save
             </Link>
           )}
 
-          <div className="flex bg-slate-100 p-1 rounded-xl sm:hidden">
-            <button
-              onClick={() => setViewMode('edit')}
-              className={`p-2 rounded-lg transition-all ${viewMode === 'edit' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500'}`}
-            >
-              <Edit3 className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => setViewMode('preview')}
-              className={`p-2 rounded-lg transition-all ${viewMode === 'preview' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500'}`}
-            >
-              <Eye className="w-5 h-5" />
-            </button>
-          </div>
-
           <button
             onClick={handleSave}
             disabled={saving}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold transition-all disabled:opacity-50 ${
+            className={`hidden md:flex items-center gap-2 px-4 py-2 rounded-xl font-bold transition-all disabled:opacity-50 ${
               isGuest
                 ? 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-lg shadow-indigo-100'
                 : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50'
             }`}
           >
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : isGuest ? <LogIn className="w-4 h-4" /> : <Save className="w-4 h-4" />}
-            <span className="hidden sm:inline">{isGuest ? 'Login to Save' : 'Save'}</span>
+            <span>{isGuest ? 'Login to Save' : 'Save'}</span>
           </button>
           {/* Gated Download Button — reads blob URL from BlobProvider below */}
           <button
             id="download-pdf-btn"
             onClick={handleDownload}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold shadow-lg transition-all ${
+            className={`hidden md:flex items-center gap-2 px-4 py-2 rounded-xl font-bold shadow-lg transition-all ${
               !isGuest && tokens === 0
                 ? 'bg-red-500 hover:bg-red-600 text-white shadow-red-200'
                 : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-100'
@@ -610,16 +598,51 @@ export default function BuilderPage() {
             title={isGuest ? 'Sign in to download' : tokens === 0 ? 'No tokens — watch an ad to earn 1 free' : `Download PDF (costs 1 token)`}
           >
             <Download className="w-4 h-4" />
-            <span className="hidden sm:inline">
+            <span>
               {isGuest ? 'Download PDF' : tokens === 0 ? '🎬 Earn & Download' : 'Download PDF'}
             </span>
           </button>
         </div>
       </header>
 
+      {/* Mobile Floating Action Button for Preview/Edit Toggle */}
+      <button
+        onClick={() => setViewMode(viewMode === 'edit' ? 'preview' : 'edit')}
+        className="md:hidden fixed bottom-24 right-4 z-50 rounded-full p-4 shadow-xl bg-blue-600 text-white hover:bg-blue-700 transition-all active:scale-95"
+      >
+        {viewMode === 'edit' ? <Eye className="w-6 h-6" /> : <Edit3 className="w-6 h-6" />}
+      </button>
+
+      {/* Mobile Bottom Action Bar */}
+      <div className="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-40 p-3 flex justify-between gap-3 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+        <button
+          onClick={handleSave}
+          disabled={saving}
+          className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-bold transition-all disabled:opacity-50 ${
+            isGuest
+              ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-100'
+              : 'bg-slate-100 text-slate-700'
+          }`}
+        >
+          {saving ? <Loader2 className="w-5 h-5 animate-spin" /> : isGuest ? <LogIn className="w-5 h-5" /> : <Save className="w-5 h-5" />}
+          <span>{isGuest ? 'Login' : 'Save'}</span>
+        </button>
+        <button
+          onClick={handleDownload}
+          className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-bold shadow-lg transition-all ${
+            !isGuest && tokens === 0
+              ? 'bg-red-500 text-white shadow-red-200'
+              : 'bg-indigo-600 text-white shadow-indigo-100'
+          }`}
+        >
+          <Download className="w-5 h-5" />
+          <span>Download</span>
+        </button>
+      </div>
+
       <main className="flex-1 flex overflow-hidden">
         {/* Left Panel: Forms */}
-        <div className={`flex-1 overflow-y-auto p-4 sm:p-8 bg-white border-r border-slate-200 ${viewMode === 'preview' ? 'hidden sm:block' : 'block'}`}>
+        <div className={`flex-1 overflow-y-auto p-4 sm:p-8 bg-white border-r border-slate-200 pb-28 md:pb-8 ${viewMode === 'preview' ? 'hidden md:block' : 'block'}`}>
           <div className="max-w-2xl mx-auto">
             <div className="flex items-center gap-2 mb-8 text-slate-400">
               <Layout className="w-5 h-5" />
@@ -742,7 +765,7 @@ export default function BuilderPage() {
             RIGHT PANEL: BULLETPROOF PDF LIVE PREVIEW
             Architecture: usePDF blob → native <iframe>
             ═══════════════════════════════════════════════════════════ */}
-        <div className={`flex-1 overflow-hidden ${viewMode === 'edit' ? 'hidden sm:block' : 'block'}`}>
+        <div className={`flex-1 overflow-hidden pb-28 md:pb-0 ${viewMode === 'edit' ? 'hidden md:block' : 'block'}`}>
           {!isDataReady ? (
             <div className="w-full h-full relative bg-slate-50 flex flex-col items-center justify-center animate-pulse">
               <RefreshCw className="w-8 h-8 animate-spin text-indigo-500 mb-2" />
