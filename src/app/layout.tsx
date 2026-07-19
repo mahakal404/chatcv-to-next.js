@@ -24,6 +24,10 @@ export const metadata: Metadata = {
       'Build a professional ATS-friendly resume in minutes. Free, no watermarks, instant PDF export.',
     type: 'website',
   },
+  icons: {
+    icon: '/chatcv_fevi.webp',
+    apple: '/chatcv_fevi.webp',
+  },
 };
 
 export default function RootLayout({
