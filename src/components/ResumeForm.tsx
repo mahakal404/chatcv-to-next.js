@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useRef } from 'react';
 import { ResumeData, Experience, Education, Project, Certification, Skill, Language } from '../types';
 import { motion, AnimatePresence } from 'motion/react';
@@ -583,7 +585,7 @@ export default function ResumeForm({ data, setData, onAIImprove }: ResumeFormPro
                             <div>
                               <label className="block text-xs font-bold text-slate-500 uppercase mb-1 ml-1">Degree / Course Name</label>
                               <select
-                                value={DEGREE_OPTIONS[edu.level]?.includes(edu.degree) ? edu.degree : (edu.degree ? 'Other' : '')}
+                                value={DEGREE_OPTIONS[edu.level]?.includes(edu.degree || '') ? edu.degree : (edu.degree ? 'Other' : '')}
                                 onChange={(e) => {
                                   const val = e.target.value;
                                   if (val === 'Other') {
@@ -599,7 +601,7 @@ export default function ResumeForm({ data, setData, onAIImprove }: ResumeFormPro
                                   <option key={opt} value={opt}>{opt}</option>
                                 ))}
                               </select>
-                              {(!DEGREE_OPTIONS[edu.level]?.includes(edu.degree) && edu.degree !== undefined) || (edu.degree === '' && !DEGREE_OPTIONS[edu.level]?.includes('')) ? (
+                              {(!DEGREE_OPTIONS[edu.level]?.includes(edu.degree || '') && edu.degree !== undefined) || (edu.degree === '' && !DEGREE_OPTIONS[edu.level]?.includes('')) ? (
                                 <div className="mt-2">
                                   <Input 
                                     label="Specify Degree" 

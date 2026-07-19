@@ -1,15 +1,20 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
-import { User, signOut } from 'firebase/auth';
+import { signOut } from 'firebase/auth';
 import { auth, db } from '../firebase';
 import { collection, query, where, onSnapshot, deleteDoc, doc, addDoc, serverTimestamp, updateDoc } from 'firebase/firestore';
-import { useNavigate, Link } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { motion } from 'motion/react';
 import { Plus, FileText, Trash2, LogOut, Clock, ChevronRight, Sparkles, Wand2, AlertCircle, Pencil, X, Check } from 'lucide-react';
 import { Resume } from '../types';
 import { AnimatePresence } from 'motion/react';
 import { toast } from 'sonner';
-import desktopLogo from '../assets/chatcv_desk.webp';
 import TokenBox from '../components/TokenBox';
+import { useAuth } from '../context/AuthContext';
+
+const desktopLogo = '/chatcv_desk.webp';
 
 interface DeleteConfirmModalProps {
   isOpen: boolean;
@@ -62,7 +67,15 @@ const DeleteConfirmModal = ({ isOpen, onClose, onConfirm, title }: DeleteConfirm
   </AnimatePresence>
 );
 
-export default function DashboardPage({ user }: { user: User }) {
+export default function DashboardPage() {
+  const { user, loading: authLoading } = useAuth();
+  const router = useRouter();
+
+  // Client-side auth guard
+  useEffect(() => {
+    if (!authLoading && !user) router.replace('/login');
+  }, [user, authLoading, router]);
+
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -73,9 +86,9 @@ export default function DashboardPage({ user }: { user: User }) {
     title: ''
   });
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
+    if (!user) return;
     const q = query(collection(db, 'resumes'), where('uid', '==', user.uid));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const resumeList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Resume));
@@ -86,10 +99,11 @@ export default function DashboardPage({ user }: { user: User }) {
       setLoading(false);
     });
     return () => unsubscribe();
-  }, [user.uid]);
+  }, [user]);
 
   const handleCreateNew = async () => {
     try {
+      if (!user) return;
       const docRef = await addDoc(collection(db, 'resumes'), {
         uid: user.uid,
         title: 'Untitled Resume',
@@ -105,7 +119,7 @@ export default function DashboardPage({ user }: { user: User }) {
           accentColor: '#4f46e5'
         }
       });
-      navigate(`/builder/${docRef.id}`);
+      router.push(`/builder/${docRef.id}`);
     } catch (err) {
       console.error("Error creating resume:", err);
     }
@@ -128,7 +142,7 @@ export default function DashboardPage({ user }: { user: User }) {
 
   const handleSignOut = async () => {
     await signOut(auth);
-    navigate('/');
+    router.push('/');
   };
 
   const handleLogoutRequest = () => setShowLogoutModal(true);
@@ -141,7 +155,7 @@ export default function DashboardPage({ user }: { user: User }) {
     setNewName(currentTitle);
   };
 
-  const handleRenameCancel = (e: React.MouseEvent) => {
+  const handleRenameCancel = (e: React.MouseEvent | React.KeyboardEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setEditingId(null);
@@ -246,26 +260,26 @@ export default function DashboardPage({ user }: { user: User }) {
       </AnimatePresence>
       {/* Header */}
       <header className="bg-white border-b border-slate-200 px-8 py-4 flex items-center justify-between sticky top-0 z-50">
-        <Link to="/" className="flex items-center flex-shrink-0 hover:opacity-90 transition-opacity">
+        <Link href="/" className="flex items-center flex-shrink-0 hover:opacity-90 transition-opacity">
           <img src={desktopLogo} alt="ChatCV Logo" className="h-10 w-auto object-contain" />
         </Link>
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-3">
             <div className="text-right hidden sm:block">
-              <p className="text-sm font-bold text-slate-900">{user.displayName || 'User'}</p>
-              <p className="text-xs text-slate-500">{user.email}</p>
+              <p className="text-sm font-bold text-slate-900">{user?.displayName || 'User'}</p>
+              <p className="text-xs text-slate-500">{user?.email}</p>
             </div>
-            {user.photoURL ? (
+            {user?.photoURL ? (
               <img src={user.photoURL} alt="Profile" className="w-10 h-10 rounded-full border border-slate-200" referrerPolicy="no-referrer" />
             ) : (
               <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold border border-indigo-200">
-                {user.email?.[0].toUpperCase()}
+                {user?.email?.[0].toUpperCase()}
               </div>
             )}
           </div>
           {user?.email === 'rc6542698@gmail.com' && (
             <Link 
-              to="/admin" 
+              href="/admin" 
               className="border border-indigo-500/30 bg-indigo-500/10 text-indigo-600 hover:bg-indigo-500/20 px-3 py-2 sm:px-4 sm:py-2 rounded-xl transition-all font-medium text-sm flex items-center gap-1.5 sm:gap-2"
               title="Admin Panel"
             >
@@ -294,7 +308,7 @@ export default function DashboardPage({ user }: { user: User }) {
             Create New Resume
           </button>
           <Link
-            to="/ai-builder"
+            href="/ai-builder"
             className="bg-brand-purple text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-purple-700 shadow-lg shadow-brand-purple/20 transition-all"
           >
             <Sparkles className="w-5 h-5" />
@@ -323,7 +337,7 @@ export default function DashboardPage({ user }: { user: User }) {
                 Standard (Manual)
               </button>
               <Link
-                to="/ai-builder"
+                href="/ai-builder"
                 className="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all flex items-center gap-2"
               >
                 <Sparkles className="w-5 h-5" />
@@ -339,7 +353,7 @@ export default function DashboardPage({ user }: { user: User }) {
                 whileHover={{ y: -4 }}
                 className="bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl hover:shadow-slate-100 transition-all group"
               >
-                <Link to={`/builder/${resume.id}`} className="block p-6">
+                <Link href={`/builder/${resume.id}`} className="block p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div className="bg-indigo-50 p-3 rounded-xl text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-all">
                       <FileText className="w-6 h-6" />

@@ -1,13 +1,18 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { User as FirebaseUser } from 'firebase/auth';
+'use client';
+
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'motion/react';
 import { FileText, Sparkles, Layout, Download, Zap, Wand2, ChevronDown, CheckCircle2, ArrowRight, ShieldCheck, Globe, HelpCircle, User } from 'lucide-react';
 import { useState } from 'react';
-import desktopLogo from '../assets/chatcv_desk.webp';
+import { useAuth } from '../context/AuthContext';
 
-export default function LandingPage({ user }: { user: FirebaseUser | null }) {
+const desktopLogo = '/chatcv_desk.webp';
+
+export default function LandingPage() {
+  const { user } = useAuth();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const faqs = [
     {
@@ -33,17 +38,17 @@ export default function LandingPage({ user }: { user: FirebaseUser | null }) {
       {/* Navbar */}
       <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-100 transition-all duration-300">
         <div className="container mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-0">
-          <Link to="/" className="flex items-center flex-shrink-0">
+          <Link href="/" className="flex items-center flex-shrink-0">
             <img src={desktopLogo} alt="ChatCV Logo" className="h-16 w-auto object-contain" />
           </Link>
           <div className="flex items-center justify-center gap-3 w-full md:w-auto">
             {!user && (
-              <Link to="/login" className="text-slate-600 font-semibold hover:text-brand-purple transition-all whitespace-nowrap">
+              <Link href="/login" className="text-slate-600 font-semibold hover:text-brand-purple transition-all whitespace-nowrap">
                 Sign In
               </Link>
             )}
             <Link 
-              to={user ? "/dashboard" : "/builder"} 
+              href={user ? "/dashboard" : "/builder"} 
               className="bg-brand-dark text-white px-6 py-2.5 rounded-full font-bold hover:bg-slate-800 transition-all shadow-lg shadow-slate-900/10 whitespace-nowrap"
             >
               {user ? 'Dashboard' : 'Get Started'}
@@ -71,14 +76,14 @@ export default function LandingPage({ user }: { user: FirebaseUser | null }) {
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Link 
-              to="/builder" 
+              href="/builder" 
               className="bg-button-gradient text-white px-10 py-5 rounded-2xl text-lg font-black flex items-center gap-3 hover:scale-105 transition-all magic-button-glow"
             >
               <Sparkles className="w-6 h-6" />
               Magic AI Builder
             </Link>
             <Link 
-              to="/builder" 
+              href="/builder" 
               className="bg-brand-dark text-white px-10 py-5 rounded-2xl text-lg font-black flex items-center gap-3 hover:scale-105 transition-all shadow-xl shadow-slate-900/20"
             >
               <FileText className="w-6 h-6" />
@@ -288,7 +293,7 @@ export default function LandingPage({ user }: { user: FirebaseUser | null }) {
             Join thousands of professionals who have successfully built their ATS-friendly resumes with ChatCV. It's free, fast, and secure.
           </p>
           <button 
-            onClick={() => navigate(user ? '/dashboard' : '/builder')}
+            onClick={() => router.push(user ? '/dashboard' : '/builder')}
             className="px-10 py-5 bg-white text-blue-700 font-bold rounded-full text-lg hover:bg-gray-50 hover:scale-105 transition-all duration-300 shadow-xl flex items-center gap-2"
           >
             <span className="whitespace-nowrap">Get Started for Free</span>
@@ -301,7 +306,7 @@ export default function LandingPage({ user }: { user: FirebaseUser | null }) {
       <footer className="bg-white border-t border-slate-100 pt-20 pb-12 px-8">
         <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-12 mb-16">
           <div className="col-span-2 md:col-span-1">
-            <Link to="/" className="flex items-center mb-6 hover:opacity-90 transition-opacity">
+            <Link href="/" className="flex items-center mb-6 hover:opacity-90 transition-opacity">
               <img src={desktopLogo} alt="ChatCV Logo" className="h-10 w-auto object-contain" />
             </Link>
             <p className="text-slate-500 text-sm leading-relaxed font-medium mb-6">
@@ -317,10 +322,10 @@ export default function LandingPage({ user }: { user: FirebaseUser | null }) {
           <div>
             <h4 className="font-black text-slate-900 uppercase text-xs tracking-widest mb-6">Product</h4>
             <ul className="space-y-4 text-sm font-bold text-slate-500">
-              <li><Link to="/ai-builder" className="hover:text-brand-purple transition-colors">Magic AI Builder</Link></li>
-              <li><Link to="/dashboard" className="hover:text-brand-purple transition-colors">Standard Editor</Link></li>
-              <li><Link to="/" className="hover:text-brand-purple transition-colors">Professional Templates</Link></li>
-              <li><Link to="/" className="hover:text-brand-purple transition-colors">ATS-Friendly CV Maker</Link></li>
+              <li><Link href="/ai-builder" className="hover:text-brand-purple transition-colors">Magic AI Builder</Link></li>
+              <li><Link href="/dashboard" className="hover:text-brand-purple transition-colors">Standard Editor</Link></li>
+              <li><Link href="/" className="hover:text-brand-purple transition-colors">Professional Templates</Link></li>
+              <li><Link href="/" className="hover:text-brand-purple transition-colors">ATS-Friendly CV Maker</Link></li>
             </ul>
           </div>
 

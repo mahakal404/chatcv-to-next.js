@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useCallback } from 'react';
 import { Coins, Download, Play, X as XIcon } from 'lucide-react';
 import { toast } from 'sonner';

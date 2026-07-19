@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { ResumeData } from '../../types';
 import { Mail, Phone, Linkedin, Globe, Terminal, Code, Briefcase, Cpu, ExternalLink, GraduationCap, Award } from 'lucide-react';

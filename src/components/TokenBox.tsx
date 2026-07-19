@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { Coins, Plus } from 'lucide-react';
 import { useUserProfile, ADMIN_EMAIL } from '../hooks/useUserProfile';

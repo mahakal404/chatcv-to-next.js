@@ -1,12 +1,14 @@
-import { useNavigate } from 'react-router-dom';
+'use client';
+
+import { useRouter } from 'next/navigation';
 import { MessageSquare } from 'lucide-react';
 
 export default function AIChatbot() {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   return (
     <button
-      onClick={() => navigate('/ai-assistant')}
+      onClick={() => router.push('/ai-assistant')}
       className="fixed bottom-6 right-6 bg-purple-600 text-white p-4 rounded-full shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] hover:bg-purple-700 transition-all z-[100] group animate-bounce hover:animate-none"
     >
       <MessageSquare className="w-6 h-6 group-hover:scale-110 transition-transform" />

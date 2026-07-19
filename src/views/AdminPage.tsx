@@ -1,23 +1,31 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import { User } from 'firebase/auth';
 import { collection, getDocs, doc, updateDoc, increment } from 'firebase/firestore';
 import { db } from '../firebase';
 import { ADMIN_EMAIL, UserProfile } from '../hooks/useUserProfile';
-import { Navigate, Link } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { ChevronLeft, Gift, Search, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { useAuth } from '../context/AuthContext';
 
-export default function AdminPage({ user }: { user: User | null }) {
+export default function AdminPage() {
+  const { user } = useAuth();
+  const router = useRouter();
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [giftingId, setGiftingId] = useState<string | null>(null);
   const [giftAmount, setGiftAmount] = useState(5);
 
-  // Secure route
-  if (!user || user.email !== ADMIN_EMAIL) {
-    return <Navigate to="/dashboard" />;
-  }
+  // Secure route: redirect non-admins
+  useEffect(() => {
+    if (user !== undefined && (!user || user.email !== ADMIN_EMAIL)) {
+      router.replace('/dashboard');
+    }
+  }, [user, router]);
 
   const fetchUsers = async () => {
     try {
@@ -69,7 +77,7 @@ export default function AdminPage({ user }: { user: User | null }) {
       {/* Header */}
       <div className="max-w-6xl mx-auto mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <Link to="/dashboard" className="p-2 bg-white rounded-xl shadow-sm hover:bg-slate-50 transition-all text-slate-500">
+          <Link href="/dashboard" className="p-2 bg-white rounded-xl shadow-sm hover:bg-slate-50 transition-all text-slate-500">
             <ChevronLeft className="w-5 h-5" />
           </Link>
           <div>

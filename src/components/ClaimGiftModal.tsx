@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { User } from 'firebase/auth';
 import { motion, AnimatePresence } from 'motion/react';

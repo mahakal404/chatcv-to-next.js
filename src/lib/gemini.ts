@@ -1,3 +1,5 @@
+'use client';
+
 import { GoogleGenAI, Type } from '@google/genai';
 import { ResumeData } from '../types';
 
@@ -64,7 +66,7 @@ export async function getGeminiResponse(
   history: { role: 'user' | 'model'; parts: { text: string }[] }[],
   fileData?: { data: string, mimeType: string }
 ) {
-  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+  const ai = new GoogleGenAI({ apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY });
   
   const prompt = `
     Current Resume Data: ${JSON.stringify(currentData)}

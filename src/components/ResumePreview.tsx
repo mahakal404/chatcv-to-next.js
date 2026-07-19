@@ -1,3 +1,5 @@
+'use client';
+
 import React, { forwardRef, useState } from 'react';
 import { ResumeData } from '../types';
 import { Mail, Phone, MapPin, Linkedin, Globe, Edit2, Check, X, Star, Code, Terminal, ExternalLink, Github, Briefcase, GraduationCap, Award, Cpu, User, Languages } from 'lucide-react';

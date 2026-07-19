@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { Document, Page, Text, View, StyleSheet, Font, Svg, Circle as SvgCircle, Path, Image, Link } from '@react-pdf/renderer';
 import { ResumeData } from '../../types';
@@ -143,6 +145,7 @@ const circularRing = ({ percentage, color, bgColor, textColor, size = 44 }: { pe
   return (
     <Svg width={size} height={size} viewBox="0 0 44 44" style={{ width: size, height: size }}>
       <SvgCircle cx={cx} cy={cy} r={r} stroke={bgColor} strokeWidth={3} fill="none" />
+      {/* @ts-ignore react-pdf types missing strokeDashoffset */}
       <SvgCircle cx={cx} cy={cy} r={r} stroke={color} strokeWidth={3} fill="none" strokeDasharray={`${c}`} strokeDashoffset={`${offset}`} strokeLinecap="round" origin={`${cx}, ${cy}`} rotation={-90} />
     </Svg>
   );

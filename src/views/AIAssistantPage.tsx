@@ -1,10 +1,11 @@
-import { useNavigate } from 'react-router-dom';
+'use client';
+
+import { useRouter } from 'next/navigation';
 import { Bot, Terminal, MessageSquare } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { User } from 'firebase/auth';
 
-export default function AIAssistantPage({ user }: { user: User }) {
-  const navigate = useNavigate();
+export default function AIAssistantPage() {
+  const router = useRouter();
   const [terminalStep, setTerminalStep] = useState(0);
   
   const terminalMessages = [
@@ -63,7 +64,7 @@ export default function AIAssistantPage({ user }: { user: User }) {
 
         {/* Call to Action (Redirects to Dashboard/Editor) */}
         <button 
-          onClick={() => navigate('/dashboard')}
+          onClick={() => router.push('/dashboard')}
           className="group relative px-10 py-5 bg-slate-900 text-white font-bold rounded-2xl text-xl hover:bg-slate-800 transition-all duration-300 shadow-2xl hover:shadow-purple-500/20 flex items-center gap-4 overflow-hidden"
         >
           <div className="absolute inset-0 w-0 bg-gradient-to-r from-purple-600 to-indigo-600 transition-all duration-[400ms] ease-out group-hover:w-full"></div>

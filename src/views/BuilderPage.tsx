@@ -1,6 +1,8 @@
+'use client';
+
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { User } from 'firebase/auth';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { db } from '../firebase';
 import { doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { ChevronLeft, Save, Download, Layout, Palette, Eye, Edit3, Sparkles, Loader2, ZoomIn, ZoomOut, RotateCcw, CheckCircle2, Cloud, Pencil, RefreshCw, AlertTriangle, LogIn, Coins, Play, X as XIcon } from 'lucide-react';
@@ -16,6 +18,7 @@ import TechTemplate from '../components/templates/TechTemplate';
 import { pdf } from '@react-pdf/renderer';
 import EarnTokenModal from '../components/EarnTokenModal';
 import { motion, AnimatePresence } from 'motion/react';
+import { useAuth } from '../context/AuthContext';
 
 // ─── Guest LocalStorage Key ───────────────────────────────────
 const GUEST_DATA_KEY = 'chatcv_guest_data';
@@ -23,10 +26,8 @@ const GUEST_DATA_KEY = 'chatcv_guest_data';
 import { BlobProvider } from '@react-pdf/renderer';
 import ClassicTemplatePDF from '../components/templates/ClassicTemplatePDF';
 import * as pdfjsLib from 'pdfjs-dist';
-import desktopLogo from '../assets/chatcv_desk.webp';
 
-// Configure pdf.js worker
-pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`;
+const desktopLogo = '/chatcv_desk.webp';
 
 // ─── Mobile Detection Hook ─────────────────────────────────────
 function useIsMobile(breakpoint = 640) {
@@ -210,9 +211,12 @@ const INITIAL_DATA: ResumeData = {
   customSections: []
 };
 
-export default function BuilderPage({ user }: { user: User | null }) {
-  const { id } = useParams();
-  const navigate = useNavigate();
+export default function BuilderPage() {
+  const { user } = useAuth();
+  const params = useParams();
+  // Next.js [[...slug]] route: /builder → slug undefined, /builder/abc → slug=['abc']
+  const id = (params?.slug as string[] | undefined)?.[0];
+  const router = useRouter();
   const isGuest = !user;
   const [resume, setResume] = useState<Resume | null>(null);
   const [data, setData] = useState<ResumeData>(INITIAL_DATA);
@@ -239,6 +243,11 @@ export default function BuilderPage({ user }: { user: User | null }) {
   // Authenticated users: per-resume draft key (pre-existing behaviour)
   // Guest users: shared guest key (chatcv_guest_data)
   const draftKey = isGuest ? GUEST_DATA_KEY : (id ? `chatCV_draft_${id}` : null);
+
+  // ─── Configure pdf.js worker (browser-only, safe inside useEffect) ────
+  useEffect(() => {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`;
+  }, []);
 
   // ─── Fix 2: Master Debounce (1s delay + Deep Clone) ───────────
   // Deep-cloning breaks object reference equality so React-PDF
@@ -334,10 +343,10 @@ export default function BuilderPage({ user }: { user: User | null }) {
         if (docSnap.exists()) {
           const resumeData = docSnap.data() as Resume;
           if (resumeData.uid !== user.uid) {
-            navigate('/dashboard');
+            router.push('/dashboard');
             return;
           }
-          setResume({ id: docSnap.id, ...resumeData });
+          setResume({ ...resumeData, id: docSnap.id });
           
           // Check for a local draft
           const perResumeDraftKey = `chatCV_draft_${id}`;
@@ -373,7 +382,7 @@ export default function BuilderPage({ user }: { user: User | null }) {
           setDebouncedData(resumeData.data);
           setIsDataReady(true);
         } else {
-          navigate('/dashboard');
+          router.push('/dashboard');
         }
       } catch (err) {
         console.error("Error fetching resume:", err);
@@ -383,7 +392,7 @@ export default function BuilderPage({ user }: { user: User | null }) {
       }
     };
     fetchResume();
-  }, [id, user, navigate]);
+  }, [id, user, router]);
 
   // ─── Live Magic ───────────────────────────────────────────────
   // Save-status + auto-save are now handled inside the Master
@@ -393,7 +402,7 @@ export default function BuilderPage({ user }: { user: User | null }) {
     if (isGuest) {
       // Guest: redirect to login with a hint
       toast.info('Please sign in to save your resume to the cloud!', { duration: 4000 });
-      navigate('/login');
+      router.push('/login');
       return;
     }
     if (!id || !user) return;
@@ -427,7 +436,7 @@ export default function BuilderPage({ user }: { user: User | null }) {
   const handleDownload = useCallback(async () => {
     if (isGuest) {
       toast.info('Please sign in to download your resume!', { duration: 4000 });
-      navigate('/login');
+      router.push('/login');
       return;
     }
     if (tokens <= 0) {
@@ -451,7 +460,7 @@ export default function BuilderPage({ user }: { user: User | null }) {
       console.error('Download error:', err);
       toast.error('Download failed. Token was not deducted.');
     }
-  }, [isGuest, tokens, deductToken, addToken, data.personalInfo.fullName, debouncedData, navigate]);
+  }, [isGuest, tokens, deductToken, addToken, data.personalInfo.fullName, debouncedData, router]);
 
 
   const handleUnlockClassicIcons = async () => {
@@ -475,7 +484,7 @@ export default function BuilderPage({ user }: { user: User | null }) {
 
   const handleAIImprove = async (section: string, content: string) => {
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+      const ai = new GoogleGenAI({ apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY });
       const response = await ai.models.generateContent({
         model: "gemini-3.1-pro-preview",
         contents: `Improve this professional resume ${section} to be more impactful, concise, and professional: "${content}". 
@@ -485,7 +494,7 @@ export default function BuilderPage({ user }: { user: User | null }) {
           thinkingConfig: { thinkingLevel: ThinkingLevel.HIGH }
         }
       });
-      return response.text;
+      return response.text || content;
     } catch (err) {
       console.error("AI Error:", err);
       return content;
@@ -505,10 +514,10 @@ export default function BuilderPage({ user }: { user: User | null }) {
       {/* Action Bar */}
       <header className="bg-white border-b border-slate-200 px-4 sm:px-8 py-3 flex items-center justify-between z-50 shadow-sm">
         <div className="flex items-center gap-4">
-          <Link to={isGuest ? '/' : '/dashboard'} className="p-2 hover:bg-slate-100 rounded-lg transition-all text-slate-500">
+          <Link href={isGuest ? '/' : '/dashboard'} className="p-2 hover:bg-slate-100 rounded-lg transition-all text-slate-500">
             <ChevronLeft className="w-5 h-5" />
           </Link>
-          <Link to="/" className="flex items-center flex-shrink-0 hover:opacity-90 transition-opacity">
+          <Link href="/" className="flex items-center flex-shrink-0 hover:opacity-90 transition-opacity">
             <img src={desktopLogo} alt="ChatCV Logo" className="h-8 w-auto object-contain" />
           </Link>
           <div className="h-6 w-px bg-slate-200 hidden sm:block" />
@@ -550,7 +559,7 @@ export default function BuilderPage({ user }: { user: User | null }) {
           {/* Guest Banner */}
           {isGuest && (
             <Link
-              to="/login"
+              href="/login"
               className="hidden sm:flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-700 px-3 py-1.5 rounded-xl text-xs font-bold hover:bg-amber-100 transition-all"
             >
               <LogIn className="w-3.5 h-3.5" />

@@ -4,5 +4,14 @@ dist/
 coverage/
 .DS_Store
 *.log
+
+# Environment variables
 .env*
 !.env.example
+
+# Next.js build output
+.next/
+out/
+
+# Vercel
+.vercel

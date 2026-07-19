@@ -1,12 +1,16 @@
+'use client';
+
 import React, { useState } from 'react';
 import { auth, googleProvider, db } from '../firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, updateProfile, sendPasswordResetEmail } from 'firebase/auth';
 import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
-import { useNavigate, Link } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'motion/react';
 import { FileText, Mail, Lock, Sparkles, User } from 'lucide-react';
 import { FcGoogle } from 'react-icons/fc';
-import desktopLogo from '../assets/chatcv_desk.webp';
+
+const desktopLogo = '/chatcv_desk.webp';
 
 /** Ensures a user profile document exists in Firestore with tokens:5 for new users */
 async function ensureUserProfile(uid: string, email: string, displayName: string) {
@@ -36,7 +40,7 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,7 +73,7 @@ export default function LoginPage() {
           console.error('Error creating user profile:', profileErr);
         }
       }
-      navigate('/dashboard');
+      router.push('/dashboard');
     } catch (err: any) {
       console.error('Auth error:', err.code, err.message);
       
@@ -130,7 +134,7 @@ export default function LoginPage() {
       } catch (profileErr) {
         console.error('Error creating Google user profile:', profileErr);
       }
-      navigate('/dashboard');
+      router.push('/dashboard');
     } catch (err: any) {
       console.error('Google sign-in error:', err.code, err.message);
       
@@ -182,7 +186,7 @@ export default function LoginPage() {
         className="bg-white p-8 rounded-3xl shadow-2xl shadow-slate-200 w-full max-w-md border border-slate-100"
       >
         <div className="flex flex-col items-center mb-10">
-          <Link to="/" className="flex items-center mb-6 hover:opacity-90 transition-opacity">
+          <Link href="/" className="flex items-center mb-6 hover:opacity-90 transition-opacity">
             <img src={desktopLogo} alt="ChatCV Logo" className="h-10 w-auto object-contain" />
           </Link>
           

@@ -1,9 +1,11 @@
-import { useNavigate } from 'react-router-dom';
+'use client';
+
+import { useRouter } from 'next/navigation';
 import { Sparkles as SparklesIcon, FileText as FileTextIcon, Terminal } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 export default function AIBuilderPage() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [terminalStep, setTerminalStep] = useState(0);
   
   const terminalMessages = [
@@ -66,7 +68,7 @@ export default function AIBuilderPage() {
 
         {/* Call to Action (Redirects to Dashboard/Editor) */}
         <button 
-          onClick={() => navigate('/dashboard')}
+          onClick={() => router.push('/dashboard')}
           className="group relative px-10 py-5 bg-slate-900 text-white font-bold rounded-2xl text-xl hover:bg-slate-800 transition-all duration-300 shadow-2xl hover:shadow-blue-500/20 flex items-center gap-4 overflow-hidden animate-bounce hover:animate-none"
         >
           <div className="absolute inset-0 w-0 bg-gradient-to-r from-blue-600 to-indigo-600 transition-all duration-[400ms] ease-out group-hover:w-full"></div>
