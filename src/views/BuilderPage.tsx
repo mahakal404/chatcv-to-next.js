@@ -518,14 +518,14 @@ export default function BuilderPage() {
       {/* Action Bar */}
       <header className="bg-white border-b border-slate-200 px-4 sm:px-8 py-3 flex items-center justify-between z-50 shadow-sm">
         <div className="flex items-center gap-4">
-          <Link href={isGuest ? '/' : '/dashboard'} className="p-2 hover:bg-slate-100 rounded-lg transition-all text-slate-500">
+          <Link href={isGuest ? '/' : '/dashboard'} className="hidden md:flex p-2 hover:bg-slate-100 rounded-lg transition-all text-slate-500">
             <ChevronLeft className="w-5 h-5" />
           </Link>
           <Link href="/" className="hidden md:flex items-center flex-shrink-0 hover:opacity-90 transition-opacity">
             <img src={desktopLogo} alt="ChatCV Logo" className="h-8 w-auto object-contain" />
           </Link>
-          <Link href="/" className="md:hidden p-2 hover:bg-slate-100 rounded-lg transition-all text-slate-500">
-            <Home className="w-5 h-5" />
+          <Link href="/" className="md:hidden p-2 hover:bg-slate-100 rounded-lg transition-all text-slate-700">
+            <Home className="w-6 h-6" />
           </Link>
           <div className="h-6 w-px bg-slate-200 hidden sm:block" />
           <div className="hidden sm:block">
@@ -590,53 +590,47 @@ export default function BuilderPage() {
           <button
             id="download-pdf-btn"
             onClick={handleDownload}
-            className={`hidden md:flex items-center gap-2 px-4 py-2 rounded-xl font-bold shadow-lg transition-all ${
+            className={`flex items-center gap-2 px-3 py-2 md:px-4 md:py-2 rounded-xl font-bold shadow-lg transition-all ${
               !isGuest && tokens === 0
                 ? 'bg-red-500 hover:bg-red-600 text-white shadow-red-200'
                 : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-100'
             }`}
             title={isGuest ? 'Sign in to download' : tokens === 0 ? 'No tokens — watch an ad to earn 1 free' : `Download PDF (costs 1 token)`}
           >
-            <Download className="w-4 h-4" />
-            <span>
+            <Download className="w-5 h-5 md:w-4 md:h-4" />
+            <span className="hidden md:inline">
               {isGuest ? 'Download PDF' : tokens === 0 ? '🎬 Earn & Download' : 'Download PDF'}
             </span>
           </button>
         </div>
       </header>
 
-      {/* Mobile Floating Action Button for Preview/Edit Toggle */}
-      <button
-        onClick={() => setViewMode(viewMode === 'edit' ? 'preview' : 'edit')}
-        className="md:hidden fixed bottom-24 right-4 z-50 rounded-full p-4 shadow-xl bg-blue-600 text-white hover:bg-blue-700 transition-all active:scale-95"
-      >
-        {viewMode === 'edit' ? <Eye className="w-6 h-6" /> : <Edit3 className="w-6 h-6" />}
-      </button>
-
-      {/* Mobile Bottom Action Bar */}
-      <div className="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-40 p-3 flex justify-between gap-3 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+      {/* Mobile Bottom Navigation Bar (Native App Style) */}
+      <div className="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-50 px-2 py-1 flex justify-around items-center shadow-[0_-4px_10px_-1px_rgba(0,0,0,0.05)]">
+        <Link 
+          href="/dashboard"
+          className="flex flex-col items-center justify-center p-3 text-slate-400 hover:text-indigo-600 transition-all active:scale-95"
+        >
+          <Layout className="w-6 h-6" />
+        </Link>
+        <button
+          onClick={() => setViewMode('edit')}
+          className={`flex flex-col items-center justify-center p-3 transition-all active:scale-95 ${viewMode === 'edit' ? 'text-indigo-600' : 'text-slate-400 hover:text-indigo-600'}`}
+        >
+          <Edit3 className="w-6 h-6" />
+        </button>
+        <button
+          onClick={() => setViewMode('preview')}
+          className={`flex flex-col items-center justify-center p-3 transition-all active:scale-95 ${viewMode === 'preview' ? 'text-indigo-600' : 'text-slate-400 hover:text-indigo-600'}`}
+        >
+          <Eye className="w-6 h-6" />
+        </button>
         <button
           onClick={handleSave}
           disabled={saving}
-          className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-bold transition-all disabled:opacity-50 ${
-            isGuest
-              ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-100'
-              : 'bg-slate-100 text-slate-700'
-          }`}
+          className={`flex flex-col items-center justify-center p-3 transition-all active:scale-95 ${saving ? 'opacity-50' : ''} text-slate-400 hover:text-indigo-600`}
         >
-          {saving ? <Loader2 className="w-5 h-5 animate-spin" /> : isGuest ? <LogIn className="w-5 h-5" /> : <Save className="w-5 h-5" />}
-          <span>{isGuest ? 'Login' : 'Save'}</span>
-        </button>
-        <button
-          onClick={handleDownload}
-          className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-bold shadow-lg transition-all ${
-            !isGuest && tokens === 0
-              ? 'bg-red-500 text-white shadow-red-200'
-              : 'bg-indigo-600 text-white shadow-indigo-100'
-          }`}
-        >
-          <Download className="w-5 h-5" />
-          <span>Download</span>
+          {saving ? <Loader2 className="w-6 h-6 animate-spin" /> : isGuest ? <LogIn className="w-6 h-6" /> : <Save className="w-6 h-6" />}
         </button>
       </div>
 
@@ -849,7 +843,9 @@ export default function BuilderPage() {
           )}
         </div>
       </main>
-      <AIChatbot />
+      <div className="hidden md:block">
+        <AIChatbot />
+      </div>
 
       {/* ═══════════════════════════════════════════════════════
           AD MODAL — shown when tokens === 0
